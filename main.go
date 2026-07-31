@@ -11,14 +11,11 @@ import (
 	"strings"
 )
 
-// funcs
-// tests
 // input
 // web version
 // error handling
 // validation
 // jpg/png only
-// resize
 
 func readImage() (image.Image, error) {
 	img_path := "./go-gopher.png"
