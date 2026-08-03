@@ -2,13 +2,49 @@ package main
 
 import (
 	"ascii-go/ascii"
+	"bufio"
+	"image"
+	"image/png"
 	"log"
 	"os"
+	"strings"
 )
 
 // web version
 // validation
 // jpg/png only
+
+// lib is only concerned with conversion so file handling is outside
+// only pass an image.Image to lib = flexible so we
+// can have a cli and web version
+
+func readImage(img_path string) (image.Image, error) {
+	f, err := os.Open(img_path)
+
+	if err != nil {
+		log.Println("File not found")
+		return nil, err
+	}
+
+	defer f.Close()
+
+	reader := bufio.NewReader(f)
+
+	img, err := png.Decode(reader)
+	if err != nil {
+		log.Println("Failed to read image")
+		return nil, err
+	}
+
+	return img, nil
+}
+
+func writeOutput(output []string) error {
+	filePerms := 0644
+	outputString := strings.Join(output, "")
+	outputFile := "result.txt"
+	return os.WriteFile(outputFile, []byte(outputString), os.FileMode(filePerms))
+}
 
 func main() {
 	if len(os.Args) < 2 {
@@ -19,7 +55,7 @@ func main() {
 	img_path := os.Args[1]
 
 	// get input
-	img, err := ascii.ReadImage(img_path)
+	img, err := readImage(img_path)
 	if err != nil {
 		panic(err)
 	}
@@ -27,7 +63,7 @@ func main() {
 	output := ascii.Convert(img)
 
 	// write converted
-	err = ascii.WriteOutput(output)
+	err = writeOutput(output)
 	if err != nil {
 		panic(err)
 	}
