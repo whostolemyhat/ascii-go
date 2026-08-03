@@ -48,12 +48,12 @@ CLI implementation of https://github.com/whostolemyhat/ascii-react / [asciipictu
 
 ## Usage
 
-- run `go run main.go`
+- run `go run main.go "./go-gopher.png`
 - build `go build && ./ascii-go`
-- tests `go test`
+- tests `go test ./...`
 
 ## Notes
 
 Toy project to learn Go - don't expect idiomatic code or best practices!
 
-Currently hardcoded to read `./go-gopher.png` and output to `./result.txt`.
+Currently hardcoded to output to `./result.txt` and only read PNG
