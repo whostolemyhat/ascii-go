@@ -1,0 +1,8 @@
+body {
+  background: purple;
+}
+
+/* make text small since characters are waaay bigger than pixels */
+#output {
+  font-size: 6px;
+}

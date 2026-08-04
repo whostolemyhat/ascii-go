@@ -4,6 +4,7 @@ import (
 	"image"
 	"image/color"
 	"math"
+	"strings"
 )
 
 // take a pixel value in range 0-255 and list of characters
@@ -24,7 +25,7 @@ func pixelToChar(px uint8, charMap []string) string {
 	return charMap[int(idx)]
 }
 
-func Convert(img image.Image) []string {
+func Convert(img image.Image) string {
 	// chars for output. Use small chars ('.', ',') for lighter values
 	// and larger chars for darker values
 	charMap := [9]string{".", ",", ":", ";", "o", "x", "%", "#", "@"}
@@ -48,5 +49,5 @@ func Convert(img image.Image) []string {
 		output = append(output, "\n")
 	}
 
-	return output
+	return strings.Join(output, "")
 }

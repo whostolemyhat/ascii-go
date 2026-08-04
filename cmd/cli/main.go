@@ -1,18 +1,13 @@
 package main
 
 import (
-	"ascii-go/ascii"
+	ascii "ascii-go/internal"
 	"bufio"
 	"image"
 	"image/png"
 	"log"
 	"os"
-	"strings"
 )
-
-// web version
-// validation
-// jpg/png only
 
 // lib is only concerned with conversion so file handling is outside
 // only pass an image.Image to lib = flexible so we
@@ -39,11 +34,10 @@ func readImage(img_path string) (image.Image, error) {
 	return img, nil
 }
 
-func writeOutput(output []string) error {
+func writeOutput(output string) error {
 	filePerms := 0644
-	outputString := strings.Join(output, "")
 	outputFile := "result.txt"
-	return os.WriteFile(outputFile, []byte(outputString), os.FileMode(filePerms))
+	return os.WriteFile(outputFile, []byte(output), os.FileMode(filePerms))
 }
 
 func main() {
