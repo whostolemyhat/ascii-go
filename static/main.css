@@ -1,8 +1,28 @@
 body {
-  background: purple;
+  background: rgba(210, 124, 32, 0.764);
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.container {
+  margin: auto;
+  width: 100%;
+  max-width: 700px;
+  text-align: center;
 }
 
 /* make text small since characters are waaay bigger than pixels */
+#output, 
+.header {
+  font-family: 'Menlo', 'Courier New', Courier, monospace;
+  margin: auto;
+  font-size: 7px;
+  line-height: 0.8;
+}
+
 #output {
-  font-size: 6px;
+  text-align: center;
+}
+
+.header {
+  margin: 1rem 0;
 }

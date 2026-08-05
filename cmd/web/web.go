@@ -4,17 +4,19 @@ import (
 	ascii "ascii-go/internal"
 	"bufio"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"html/template"
+	"image"
+	"image/jpeg"
 	"image/png"
+	"io"
 	"log"
 	"net/http"
 )
 
 // TODO
-// validation
 // error handling
-// styling
 // tests/int tests
 
 func main() {
@@ -29,6 +31,23 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
+var allowedTypes = map[string]string{
+	"image/jpg":  ".jpg",
+	"image/jpeg": ".jpg",
+	"image/png":  ".png",
+}
+
+func readImage(contentType string, reader *bufio.Reader) (image.Image, error) {
+	switch contentType {
+	case ".png":
+		return png.Decode(reader)
+	case ".jpg":
+		return jpeg.Decode(reader)
+	}
+
+	return nil, errors.New("Invalid file type")
+}
+
 func convertImage(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseMultipartForm(10 << 20) // 10mb
 	if err != nil {
@@ -37,10 +56,39 @@ func convertImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	file, fileHeader, err := r.FormFile("img")
+	if err != nil {
+		log.Print(err.Error())
+		http.Error(w, "Missing image field", http.StatusBadRequest)
+		return
+	}
 	fmt.Println(fileHeader.Size, fileHeader.Filename, fileHeader.Header)
 
+	defer file.Close()
+
+	// check actual file type
+	buf := make([]byte, 512)
+	n, err := file.Read(buf)
+	if err != nil && err != io.EOF {
+		http.Error(w, "Couldn't read file", http.StatusInternalServerError)
+		return
+	}
+	contentType := http.DetectContentType((buf[:n]))
+
+	ext, ok := allowedTypes[contentType]
+	if !ok {
+		http.Error(w, fmt.Sprintf("Invalid file type %s", contentType), http.StatusBadRequest)
+		return
+	}
+
+	// rewind file to actually read it
+	_, err = file.Seek(0, io.SeekStart)
+	if err != nil {
+		http.Error(w, "Couldn't process file", http.StatusInternalServerError)
+		return
+	}
+
 	reader := bufio.NewReader(file)
-	img, err := png.Decode(reader)
+	img, err := readImage(ext, reader)
 	if err != nil {
 		log.Print(err.Error())
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
