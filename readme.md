@@ -50,11 +50,9 @@ CLI implementation of https://github.com/whostolemyhat/ascii-react / [asciipictu
 
 - run `go run ./cmd/cli/main.go "./go-gopher.png`
 - Web: `go run "./cmd/web/web.go"` and open localhost:8080
-- build `go build && ./ascii-go`
 - tests `go test ./...`
 
 ## Notes
 
 Toy project to learn Go - don't expect idiomatic code or best practices!
 
-Currently hardcoded to output to `./result.txt` and only read PNG
