@@ -11,7 +11,7 @@ on:
 
 jobs:
 
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -26,3 +26,17 @@ jobs:
 
     - name: Test
       run: go test -v ./...
+
+    - name: Install SSH Key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        # https://zellwk.com/blog/github-actions-deploy/
+        key: ${{ secrets.DEPLOY_KEY }}
+        known_hosts: "just-a-placeholder-so-we-dont-get-errors"
+
+    - name: Add to known hosts
+      # SSH_HOST is the IP of the digital ocean droplet
+      run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+    - name: Deploy new version
+      run: rsync -avz ./dist/ ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}}:${{secrets.DEST_FOLDER}}
