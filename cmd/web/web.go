@@ -20,6 +20,7 @@ import (
 // tests/int tests
 
 func main() {
+	port := "5656"
 	// relative to root/where you call `go run` from
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("GET /static/", http.StripPrefix("/static/", fs))
@@ -27,8 +28,8 @@ func main() {
 
 	http.HandleFunc("POST /api/convert", convertImage)
 
-	log.Print("Listening on port 8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Print("Listening on port " + port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
 var allowedTypes = map[string]string{
@@ -117,12 +118,6 @@ func serveTemplate(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Print(err.Error())
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-
-	if err != nil {
-		log.Print(err.Error())
-		http.Error(w, http.StatusText(500), 500)
 		return
 	}
 
