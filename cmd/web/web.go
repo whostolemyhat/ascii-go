@@ -27,7 +27,7 @@ func main() {
 		port = "5656"
 	}
 
-	baseDir := os.Getenv("PORT")
+	baseDir := os.Getenv("BASEDIR")
 	if baseDir == "" {
 		baseDir = "."
 	}
@@ -121,7 +121,7 @@ func writeJson(w http.ResponseWriter, status int, data any) {
 // https://www.alexedwards.net/blog/serving-static-sites-with-go
 // TODO parse on startup
 func serveTemplate(w http.ResponseWriter, r *http.Request) {
-	baseDir := os.Getenv("PORT")
+	baseDir := os.Getenv("BASEDIR")
 	if baseDir == "" {
 		baseDir = "."
 	}
