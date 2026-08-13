@@ -13,6 +13,8 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
+	"path"
 )
 
 // TODO
@@ -20,9 +22,19 @@ import (
 // tests/int tests
 
 func main() {
-	port := "5656"
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "5656"
+	}
+
+	baseDir := os.Getenv("PORT")
+	if baseDir == "" {
+		baseDir = "."
+	}
+
 	// relative to root/where you call `go run` from
-	fs := http.FileServer(http.Dir("./static"))
+	fs := http.FileServer(http.Dir(path.Join(baseDir, "static")))
+
 	http.Handle("GET /static/", http.StripPrefix("/static/", fs))
 	http.HandleFunc("GET /", serveTemplate)
 
@@ -109,9 +121,14 @@ func writeJson(w http.ResponseWriter, status int, data any) {
 // https://www.alexedwards.net/blog/serving-static-sites-with-go
 // TODO parse on startup
 func serveTemplate(w http.ResponseWriter, r *http.Request) {
+	baseDir := os.Getenv("PORT")
+	if baseDir == "" {
+		baseDir = "."
+	}
+
 	files := []string{
-		"./templates/layout.html",
-		"./templates/index.html",
+		path.Join(baseDir, "templates/layout.html"),
+		path.Join(baseDir, "templates/index.html"),
 	}
 
 	tmpl, err := template.ParseFiles(files...)
