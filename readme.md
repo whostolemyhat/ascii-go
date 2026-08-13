@@ -44,12 +44,14 @@
 ...................o:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::%::;:................
 ```
 
-CLI implementation of https://github.com/whostolemyhat/ascii-react / [asciipicture](https://asciipicture.com) in Go.
+CLI and web mplementation of https://github.com/whostolemyhat/ascii-react / [asciipicture](https://asciipicture.com) in Go.
+
+Running at asciigo.jamesbaum.co.uk
 
 ## Usage
 
 - run `go run ./cmd/cli/main.go "./go-gopher.png`
-- Web: `go run "./cmd/web/web.go"` and open localhost:8080
+- Web: `go run "./cmd/web/web.go"` and open localhost:5656
 - tests `go test ./...`
 
 ## Notes

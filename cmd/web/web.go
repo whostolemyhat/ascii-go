@@ -126,8 +126,6 @@ func serveTemplate(w http.ResponseWriter, r *http.Request) {
 		baseDir = "."
 	}
 
-	fmt.Println(path.Join(baseDir, "templates/layout.html"))
-
 	files := []string{
 		path.Join(baseDir, "templates/layout.html"),
 		path.Join(baseDir, "templates/index.html"),
